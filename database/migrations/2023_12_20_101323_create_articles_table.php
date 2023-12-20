@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-
+            $table->string('slug',200);
             $table->foreign('user_id')->references('id')->on('users')
                 ->cascadeOnUpdate()->restrictOnDelete();
-
             $table->string('title',200);
+
             $table->text('content');
             $table->string('img_url',100);
+
             $table->boolean('status')->default(0);
             $table->timestamp('publish_at')->nullable();
             $table->timestamp('created_at')->useCurrent();
