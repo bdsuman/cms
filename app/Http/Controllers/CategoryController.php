@@ -20,7 +20,13 @@ class CategoryController extends Controller
     }
 
     function CategoryCreate(Request $request){
+
         $user_id=$request->header('id');
+
+        $request ->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
         return Category::create([
             'name'=>$request->input('name'),
             'user_id'=>$user_id
@@ -45,6 +51,9 @@ class CategoryController extends Controller
     function CategoryUpdate(Request $request){
         $category_id=$request->input('id');
         $user_id=$request->header('id');
+        $request ->validate([
+            'name' => 'required|string|max:255',
+        ]);
         return Category::where('id',$category_id)->where('user_id',$user_id)->update([
             'name'=>$request->input('name'),
         ]);

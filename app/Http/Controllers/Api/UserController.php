@@ -21,7 +21,6 @@ class UserController extends Controller
         ],200);
        }else{
         return $this->failed('unauthorized');
-
        } 
        
     }

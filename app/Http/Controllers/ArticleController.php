@@ -20,7 +20,13 @@ class ArticleController extends Controller
     function CreateArticle(Request $request)
     {
         $user_id=$request->header('id');
-
+        $request ->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string|max:255',
+            'category_id' => 'required|string|max:255',
+            'img' => 'image|mimes:jpeg,bmp,png|max:2000',
+      
+        ]);
         // Prepare File Name & Path
         $img=$request->file('img');
 
@@ -84,7 +90,11 @@ class ArticleController extends Controller
     {
         $user_id=$request->header('id');
         $id=$request->input('id');
-       
+        $request ->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string|max:255',
+            'category_id' => 'required|string|max:255',
+        ]);
         if ($request->hasFile('img')) {
 
             // Upload New File

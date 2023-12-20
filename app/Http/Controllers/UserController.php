@@ -36,6 +36,14 @@ class UserController extends Controller
 
 
     function UserRegistration(Request $request){
+        $request ->validate([
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'email' => 'nullable|string|email|max:255|unique:users',   
+            'password' => 'nullable|string|min:6',
+      
+        ]);
+      
         try {
             User::create([
                 'firstName' => $request->input('firstName'),
