@@ -58,11 +58,10 @@
 
     async function Save() {
 
-        // let productCategory=document.getElementById('productCategory').value;
         let articleCategory=$('#articleCategory').val();
         let articleTitle = document.getElementById('articleTitle').value;
         let articleContent = document.getElementById('articleContent').value;
-        let articleImg = document.getElementById('productImg').files[0];
+        let articleImg = document.getElementById('articleImg').files[0];
 
         if (articleCategory.length === 0) {
             errorToast("Article Category Required !")
@@ -78,6 +77,7 @@
         }
 
         else {
+           // alert(articleCategory);
 
             document.getElementById('modal-close').click();
 
@@ -96,13 +96,14 @@
             showLoader();
             let res = await axios.post("/create-article",formData,config)
             hideLoader();
-
+                //console.log(res);
             if(res.status===201){
                 successToast('Request completed');
                 document.getElementById("save-form").reset();
                 await getList();
             }
             else{
+                
                 errorToast("Request fail !")
             }
         }

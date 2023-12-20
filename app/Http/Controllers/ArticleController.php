@@ -36,34 +36,36 @@ class ArticleController extends Controller
         $same_slug_count = Article::where('slug', 'LIKE', $slug . '%')->count();
         $slug_suffix = $same_slug_count ? '-' . $same_slug_count + 1 : '';
         $slug .= $slug_suffix;
+       
+       $article = Article::create([
+                'content'=>$request->input('content'),
+                'title'=>$request->input('title'),
+                'img_url'=>$img_url,
+                'slug'=>$slug,
+                'user_id'=>$user_id
+            ]);
 
-        // Save To Database
-        return Article::create([
-            'content'=>$request->input('content'),
-            'title'=>$request->input('title'),
-            'img_url'=>$img_url,
-            'slug'=>$slug,
-            'user_id'=>$user_id
-        ]);
+        $article->categories()->attach(explode(',',$request->input('category_id')));
+
+        return $article;
     }
 
 
     function DeleteArticle(Request $request)
     {
         $user_id=$request->header('id');
-        $product_id=$request->input('id');
+        $id=$request->input('id');
         $filePath=$request->input('file_path');
         File::delete($filePath);
-        return Product::where('id',$product_id)->where('user_id',$user_id)->delete();
-
+        return Article::where('id',$id)->where('user_id',$user_id)->delete();
     }
 
 
     function ArticleByID(Request $request)
     {
         $user_id=$request->header('id');
-        $product_id=$request->input('id');
-        return Product::where('id',$product_id)->where('user_id',$user_id)->first();
+        $article_id=$request->input('id');
+        return Article::where('id',$article_id)->where('user_id',$user_id)->first();
     }
 
 
@@ -79,8 +81,8 @@ class ArticleController extends Controller
     function UpdateArticle(Request $request)
     {
         $user_id=$request->header('id');
-        $product_id=$request->input('id');
-
+        $id=$request->input('id');
+       
         if ($request->hasFile('img')) {
 
             // Upload New File
@@ -97,23 +99,25 @@ class ArticleController extends Controller
 
             // Update Product
 
-            return Article::where('id',$product_id)->where('user_id',$user_id)->update([
-                'name'=>$request->input('name'),
-                'price'=>$request->input('price'),
-                'unit'=>$request->input('unit'),
+            $article=Article::where('id',$id)->where('user_id',$user_id)->update([
+                'content'=>$request->input('content'),
+                'title'=>$request->input('title'),
                 'img_url'=>$img_url,
-                'category_id'=>$request->input('category_id')
             ]);
 
         }
 
         else {
-            return Article::where('id',$product_id)->where('user_id',$user_id)->update([
-                'name'=>$request->input('name'),
-                'price'=>$request->input('price'),
-                'unit'=>$request->input('unit'),
-                'category_id'=>$request->input('category_id'),
+            $article= Article::where('id',$id)->where('user_id',$user_id)->update([
+                'content'=>$request->input('content'),
+                'title'=>$request->input('title'),
             ]);
         }
+        
+        $newObj = Article::where('id',$id)->where('user_id',$user_id)->first();
+        $newObj->categories()->detach();
+        $newObj->categories()->attach(explode(',',$request->input('category_id')));
+
+        return $article;
     }
 }

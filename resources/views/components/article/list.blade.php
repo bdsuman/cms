@@ -46,12 +46,13 @@ async function getList() {
 
     tableData.DataTable().destroy();
     tableList.empty();
-
+    let status ='';
     res.data.forEach(function (item,index) {
+                status = item['status']==0?'Inactive':'Active';
         let row=`<tr>
                     <td><img class="w-15 h-auto" alt="" src="${item['img_url']}"></td>
-                    <td>${item['name']}</td>
-                    <td>${item['status']}</td>
+                    <td>${item['title']}</td>
+                    <td>${status}</td>
                     <td>
                         <button data-path="${item['img_url']}" data-id="${item['id']}" class="btn editBtn btn-sm btn-outline-success">Edit</button>
                         <button data-path="${item['img_url']}" data-id="${item['id']}" class="btn deleteBtn btn-sm btn-outline-danger">Delete</button>
