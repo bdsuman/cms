@@ -24,6 +24,12 @@ Route::get('/logout',[UserController::class,'UserLogout']);
 
 // Page Routes
 Route::get('/',[HomeController::class,'HomePage']);
+Route::get('/documentation',function(){
+    return '<h1>This is an Rest API Based CMS Project </h1><hr><a href=https://documenter.getpostman.com/view/27190127/2s9Ykq7LE6" target="_blank">Click On See Postman Documentation</a>
+    <br><br><a href="https://github.com/bdsuman/cms" target="_blank">Click On See Source Code GitHub</a>
+    ';
+});
+
 Route::get('/userLogin',[UserController::class,'LoginPage']);
 Route::get('/userRegistration',[UserController::class,'RegistrationPage']);
 Route::get('/sendOtp',[UserController::class,'SendOtpPage']);
@@ -33,10 +39,6 @@ Route::get('/dashboard',[DashboardController::class,'DashboardPage'])->middlewar
 Route::get('/userProfile',[UserController::class,'ProfilePage'])->middleware([TokenVerificationMiddleware::class]);
 Route::get('/categoryPage',[CategoryController::class,'CategoryPage'])->middleware([TokenVerificationMiddleware::class]);
 Route::get('/articlePage',[ArticleController::class,'ArticlePage'])->middleware([TokenVerificationMiddleware::class]);
-
-
-
-
 // Category API
 Route::post("/create-category",[CategoryController::class,'CategoryCreate'])->middleware([TokenVerificationMiddleware::class]);
 Route::get("/list-category",[CategoryController::class,'CategoryList'])->middleware([TokenVerificationMiddleware::class]);
@@ -51,13 +53,8 @@ Route::post("/delete-article",[ArticleController::class,'DeleteArticle'])->middl
 Route::post("/update-article",[ArticleController::class,'UpdateArticle'])->middleware([TokenVerificationMiddleware::class]);
 Route::get("/list-article",[ArticleController::class,'ArticleList'])->middleware([TokenVerificationMiddleware::class]);
 Route::post("/article-by-id",[ArticleController::class,'ArticleByID'])->middleware([TokenVerificationMiddleware::class]);
-
-
-
-
-
 // SUMMARY
 Route::get("/summary",[DashboardController::class,'Summary'])->middleware([TokenVerificationMiddleware::class]);
-//
+
 
 
