@@ -4,6 +4,12 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Exception;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -27,4 +33,31 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof AuthenticationException) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
+
+        if ($exception instanceof ModelNotFoundException) {
+            return response()->json(['error' => 'Resource not found.'], 404);
+        }
+
+        if ($exception instanceof NotFoundHttpException) {
+            return response()->json(['error' => 'Endpoint not found.'], 404);
+        }
+
+        if ($exception instanceof MethodNotAllowedHttpException) {
+            return response()->json(['error' => 'Method not allowed.'], 405);
+        }
+
+        if ($exception instanceof ValidationException) {
+            return response()->json(['errors' => $exception->errors()], 422);
+        }
+
+        return parent::render($request, $exception);
+    }
+   
+
 }
