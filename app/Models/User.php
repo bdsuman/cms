@@ -8,4 +8,5 @@ class User extends Model
     protected $attributes = [
         'otp' => '0'
     ];
+    
 }

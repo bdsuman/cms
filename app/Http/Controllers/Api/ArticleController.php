@@ -1,25 +1,49 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Article;
+use App\Helper\JWTToken;
 use App\Models\Category;
+use Illuminate\View\View;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
-use Illuminate\View\View;
+use App\Http\Resources\ArticleCollection;
 
 class ArticleController extends Controller
 {
 
-    function ArticlePage():View{
-        return view('pages.dashboard.article-page');
+    function ArticleBySlug($slug)
+    {
+        $article = Article::where('slug',$slug)->get();
+        return new ArticleCollection($article);
     }
 
 
+    function ArticleList()
+    {
+        $article=Article::get();
+        return new ArticleCollection($article);
+    }
+    function ArticleListByUser(Request $request)
+    {
+        $user_id=JWTToken::GetID($request->bearerToken());
+        $article=Article::where('user_id',$user_id)->get();
+        return new ArticleCollection($article);
+    }
+    
+    function ArticleByCategoryID($id)
+    {
+        
+        $category = Category::find($id);
+        return new ArticleCollection($category->article()->get());
+        
+    }
+
     function CreateArticle(Request $request)
     {
-        $user_id=$request->header('id');
+        $user_id=JWTToken::GetID($request->bearerToken());
 
         // Prepare File Name & Path
         $img=$request->file('img');
@@ -48,41 +72,12 @@ class ArticleController extends Controller
 
         $article->categories()->attach(explode(',',$request->input('category_id')));
 
-        return $article;
+        return $this->success('Succesfully Save');
     }
-
-
-    function DeleteArticle(Request $request)
-    {
-        $user_id=$request->header('id');
-        $id=$request->input('id');
-        $filePath=$request->input('file_path');
-        File::delete($filePath);
-        return Article::where('id',$id)->where('user_id',$user_id)->delete();
-    }
-
-
-    function ArticleByID(Request $request)
-    {
-        $user_id=$request->header('id');
-        $article_id=$request->input('id');
-        return Article::where('id',$article_id)->where('user_id',$user_id)->first();
-    }
-
-
-    function ArticleList(Request $request)
-    {
-        $user_id=$request->header('id');
-        return Article::where('user_id',$user_id)->get();
-    }
-    
-
-
-
 
     function UpdateArticle(Request $request)
     {
-        $user_id=$request->header('id');
+        $user_id=JWTToken::GetID($request->bearerToken());
         $id=$request->input('id');
        
         if ($request->hasFile('img')) {
@@ -120,6 +115,25 @@ class ArticleController extends Controller
         $newObj->categories()->detach();
         $newObj->categories()->attach(explode(',',$request->input('category_id')));
 
-        return $article;
+        return $this->success('Succesfully Updated');
     }
+
+    function DeleteArticle(Request $request)
+    {
+        $user_id=JWTToken::GetID($request->bearerToken());
+        $id=$request->input('id');
+        $filePath=$request->input('file_path');
+        File::delete($filePath);
+        Article::where('id',$id)->where('user_id',$user_id)->delete();
+        return $this->success('Succesfully Deleted');
+    }
+
+
+    function ArticleByID(Request $request)
+    {
+        $user_id=JWTToken::GetID($request->bearerToken());
+        $article_id=$request->input('id');
+        return Article::where('id',$article_id)->where('user_id',$user_id)->first();
+    }
+
 }

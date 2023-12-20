@@ -52,5 +52,25 @@ class JWTToken
             return 'unauthorized';
         }
     }
+    public static function GetEmail($token){
+
+        $result=JWTToken::VerifyToken($token);
+        if($result=="unauthorized"){
+            return '';
+        }else{
+            return $result->userEmail;
+        }
+
+    }
+    public static function GetID($token){
+
+        $result=JWTToken::VerifyToken($token);
+        if($result=="unauthorized"){
+            return '';
+        }else{
+            return $result->userID;
+        }
+
+    }
 
 }
