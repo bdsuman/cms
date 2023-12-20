@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
@@ -37,6 +38,7 @@ Route::get('/userProfile',[UserController::class,'ProfilePage'])->middleware([To
 Route::get('/categoryPage',[CategoryController::class,'CategoryPage'])->middleware([TokenVerificationMiddleware::class]);
 Route::get('/customerPage',[CustomerController::class,'CustomerPage'])->middleware([TokenVerificationMiddleware::class]);
 Route::get('/productPage',[ProductController::class,'ProductPage'])->middleware([TokenVerificationMiddleware::class]);
+Route::get('/articlePage',[ArticleController::class,'ArticlePage'])->middleware([TokenVerificationMiddleware::class]);
 Route::get('/invoicePage',[InvoiceController::class,'InvoicePage'])->middleware([TokenVerificationMiddleware::class]);
 Route::get('/salePage',[InvoiceController::class,'SalePage'])->middleware([TokenVerificationMiddleware::class]);
 Route::get('/reportPage',[ReportController::class,'ReportPage'])->middleware([TokenVerificationMiddleware::class]);
@@ -68,6 +70,14 @@ Route::post("/delete-product",[ProductController::class,'DeleteProduct'])->middl
 Route::post("/update-product",[ProductController::class,'UpdateProduct'])->middleware([TokenVerificationMiddleware::class]);
 Route::get("/list-product",[ProductController::class,'ProductList'])->middleware([TokenVerificationMiddleware::class]);
 Route::post("/product-by-id",[ProductController::class,'ProductByID'])->middleware([TokenVerificationMiddleware::class]);
+
+
+// Article API
+Route::post("/create-article",[ArticleController::class,'CreateArticle'])->middleware([TokenVerificationMiddleware::class]);
+Route::post("/delete-article",[ArticleController::class,'DeleteArticle'])->middleware([TokenVerificationMiddleware::class]);
+Route::post("/update-article",[ArticleController::class,'UpdateArticle'])->middleware([TokenVerificationMiddleware::class]);
+Route::get("/list-article",[ArticleController::class,'ArticleList'])->middleware([TokenVerificationMiddleware::class]);
+Route::post("/article-by-id",[ArticleController::class,'ArticleByID'])->middleware([TokenVerificationMiddleware::class]);
 
 
 

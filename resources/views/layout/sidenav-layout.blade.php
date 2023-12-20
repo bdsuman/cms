@@ -87,6 +87,10 @@
         <span class="side-bar-item-caption">Category</span>
     </a>
 
+    <a href="{{url("/articlePage")}}" class="side-bar-item">
+        <i class="bi bi-bag"></i>
+        <span class="side-bar-item-caption">Article</span>
+    </a>
     <a href="{{url("/productPage")}}" class="side-bar-item">
         <i class="bi bi-bag"></i>
         <span class="side-bar-item-caption">Product</span>
