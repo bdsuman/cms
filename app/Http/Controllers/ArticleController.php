@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -73,6 +74,14 @@ class ArticleController extends Controller
     {
         $user_id=$request->header('id');
         return Article::where('user_id',$user_id)->get();
+    }
+    function ArticleByCategoryID($id)
+    {
+        
+        $category = Category::find($id);
+        dd($category->article()->get()->toArray());
+        // return 
+        // return Article::where('user_id',$user_id)->get();
     }
 
 

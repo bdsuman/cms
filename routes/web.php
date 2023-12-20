@@ -79,6 +79,7 @@ Route::post("/delete-article",[ArticleController::class,'DeleteArticle'])->middl
 Route::post("/update-article",[ArticleController::class,'UpdateArticle'])->middleware([TokenVerificationMiddleware::class]);
 Route::get("/list-article",[ArticleController::class,'ArticleList'])->middleware([TokenVerificationMiddleware::class]);
 Route::post("/article-by-id",[ArticleController::class,'ArticleByID'])->middleware([TokenVerificationMiddleware::class]);
+Route::get("/article-by-category-id/{id}",[ArticleController::class,'ArticleByCategoryID'])->middleware([TokenVerificationMiddleware::class]);
 
 
 
